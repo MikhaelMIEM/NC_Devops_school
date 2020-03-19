@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+        database:
+                image: mysql:5.7
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: assword
+                volumes:
+                        - ./database/setup_config:/docker-entrypoint-initdb.d
+                        - ./database/mysql:/var/lib/mysql
+                restart: always
+
+        prepare_backend_server:
+                build: ./backend_server/
+                command: python3.8 manage.py migrate
+                command: python3.8 manage.py makemigrations
+                depends_on:
+                        - database
+
+        backend_server:
+                build: ./backend_server/
+                command: python3.8 manage.py runserver 0:10000
+                depends_on:
+                        - database
+                restart: always
+
+
+        load_balancer:
+                image: nginx
+                ports:
+                        - "80:80"
+                volumes:
+                        - ./load_balancer/nginx.conf:/etc/nginx/nginx.conf
+                restart: always

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %} /{{ board.name }}/ - {{thread.theme}} {% endblock %}</title>
+
+<script>
+// function saves scroll position
+function fScroll(val)
+{
+        var hidScroll = document.getElementById('hidScroll');
+        hidScroll.value = val.scrollTop;
+}
+
+// function moves scroll position to saved value
+function fScrollMove(what)
+{
+        var hidScroll = document.getElementById('hidScroll');
+        document.getElementById(what).scrollTop = hidScroll.value;
+}
+
+</script>
+
+<style>
+    .post-box {
+        background: #FFFFFF;
+        max-width: 600px;
+        padding: 10px;
+        margin: 10px;
+   }
+    .reply-box {
+        background: #f0f0f0;
+        max-width: 600px;
+        padding: 10px;
+        border: 2px solid #000;
+        margin: 10px;
+   }
+    .add-form-box {
+        background: #f0f0f0;
+        max-width: 600px;
+        padding: 10px;
+        border: 2px solid #000;
+        margin: 10px;
+   }
+    .full-width {
+        width: 90%;
+        margin: 5px;
+    }
+</style>
+
+</head>
+<body>
+{% block content %}
+
+    <div id="boards" class="post-box" >
+    <p>
+        <b>{{thread.theme}}</b>
+        {{thread.date}}
+    </p>
+    <p>{{thread.message}}</p>
+    </div>
+
+    <ul>
+        {% for reply in replies %}
+            <div id="boards" class="reply-box" >
+                <p>
+                    <b>{{ reply.email}}</b>
+                    {{ reply.date }}
+                </p>
+                <p>{{ reply.message }}</p>
+            </div>
+        {% endfor %}
+    </ul>
+
+    <p>
+        <a href="JavaScript: location.reload(false);"> Обновить </a>
+    </p>
+
+    <form class="add-form-box" action="{% url 'boards:leave_reply' board.name thread.id %}" method="post">
+        {% csrf_token %}
+        <input class="full-width" type="text" required placeholder="e-mail" name="email"><br>
+        <textarea class="full-width" name="message" required="" placeholder="Комментарий" cols="30" rows="10"></textarea><br>
+        <button type="submit"> Отправить </button>
+
+    </form>
+
+{% endblock %}
+</body>
+</html>

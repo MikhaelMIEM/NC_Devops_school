@@ -1,0 +1,4 @@
+docker run -v mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=assword -p 3306:3306 -it mysql:5.7
+
+docker run -it --network host --rm mysql mysql -h 127.0.0.1 -u root -p
+

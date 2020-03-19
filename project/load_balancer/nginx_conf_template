@@ -1,0 +1,21 @@
+events {}
+
+http {
+
+	upstream servers {
+
+		${servers}
+	}
+	
+	server {
+	
+		listen 80;
+
+		location / {
+
+			proxy_pass 'http://servers';
+		}
+
+	}
+}
+

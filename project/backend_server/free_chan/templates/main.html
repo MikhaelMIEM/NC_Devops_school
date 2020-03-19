@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Free Chan {% endblock %}</title>
+</head>
+
+<style>
+    .boards-box {
+    background: #f0f0f0;
+    margin: auto;
+    width: 30%;
+    padding: 10px;
+    border: 2px solid #000;
+
+   }
+</style>
+
+<body>
+
+<h1 style="text-align:center;">Free Chan</h1>
+<h2 style="text-align:center;">Свободное общение</h2>
+
+{% block content %}
+    <div id="boards" class="boards-box" >
+
+    <p style="text-align:center;">
+        {% for board in board_list %}
+            <a href="{% url 'boards:boards' board.name %}">/{{ board.name }}/</a>
+        {% endfor %}
+    </p>
+
+    </div>
+{% endblock %}
+</body>
+</html>

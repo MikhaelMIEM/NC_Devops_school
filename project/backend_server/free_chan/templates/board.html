@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} /{{ board.name }}/ - Free Chan {% endblock %}</title>
+</head>
+
+<style>
+    .post-box {
+        background: #FFFFFF;
+        max-width: 600px;
+        padding: 10px;
+        margin: 10px;
+   }
+    .reply-box {
+        background: #f0f0f0;
+        max-width: 600px;
+        padding: 10px;
+        border: 2px solid #000;
+        margin: 10px;
+   }
+    .add-form-box {
+        background: #f0f0f0;
+        max-width: 600px;
+        padding: 10px;
+        border: 2px solid #000;
+        margin: 10px;
+   }
+    .full-width {
+        width: 90%;
+        margin: 5px;
+    }
+</style>
+
+<body>
+
+<h1 style="text-align:center;">/{{ board.name }}/</h1>
+<h2 style="text-align:center;">{{ board.description }}</h2>
+<hr>
+
+{% block content %}
+
+    {% for thread_and_last_replies in threads_and_last_replies %}
+        <div id="boards" class="post-box" >
+        <p>
+            <a href="{% url 'boards:threads' board.name thread_and_last_replies.thread.id %}">{{ thread_and_last_replies.thread.theme }}</a>
+            {{thread_and_last_replies.thread.date}}
+            №{{thread_and_last_replies.thread.id}}
+        </p>
+        <p>{{thread_and_last_replies.thread.message}}</p>
+        </div>
+
+        {% for reply in thread_and_last_replies.replies %}
+            <div id="boards" class="reply-box" >
+            <p>
+                {{ reply.email }}
+                {{ reply.date }}
+                №{{ reply.id }}
+            </p>
+            <p>{{ reply.message }}</p>
+            </div>
+        {% endfor %}
+
+        <hr>
+
+    {% endfor %}
+
+    <div id="boards" class="add-form-box" >
+        <form action="{% url 'boards:create_thread' board.name%}" method="post">
+            {% csrf_token %}
+            <input  type="text" required placeholder="Тема" name="theme" class="full-width"><br>
+            <textarea name="message" required="" placeholder="Сообщение" class="full-width" cols="30" rows="10"></textarea><br>
+            <button type="submit"> Создать </button>
+
+        </form>
+    </div>
+
+{% endblock %}
+</body>
+</html>
